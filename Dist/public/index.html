@@ -1,0 +1,115 @@
+<!-- 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <p id="btn1">Pawan Kumar</p>
+    <input type="text" id="msg" placeholder="enter message"/>
+    <button id="btn">Send</button>
+<button onclick="fun()">Click</button>
+    <script src="/socket.io/socket.io.js"></script>
+<script>
+       const socket=io();
+       const message=document.getElementById('msg');
+       const btn=document.getElementById('btn');
+       const btn1=document.getElementById('btn1');
+
+
+       btn.addEventListener('click',(e)=>{
+            const msg=message.value;
+            console.log("msg-->",msg);
+            <!-- socket.emit("user",msg);    // emit to send to the server through the client by name eg user
+       })
+
+       socket.on("abc",(msg)=>{
+         btn1.textContent=msg;
+       })
+
+</script>
+</body>
+</html> --> 
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat App</title>
+</head>
+<body>
+    <h1>Chat App</h1>
+
+    <!-- Chat messages -->
+    <div id="messages"></div>
+
+    <!-- Chat input -->
+    <input type="text" id="msgInput" placeholder="Enter message" />
+    <button id="sendBtn">Send</button>
+
+    <!-- File input for file upload -->
+    <input type="file" id="fileInput" />
+
+    <!-- Include Socket.io client library -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io(); // Connect to the server
+        
+        const messagesContainer = document.getElementById('messages');
+        const msgInput = document.getElementById('msgInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const fileInput = document.getElementById('fileInput');
+        
+        // Event listener for sending chat messages
+        sendBtn.addEventListener('click', () => {
+            const messageText = msgInput.value;
+            const sender = 'User';
+
+            // Emit the chat message to the server
+            socket.emit('chat message', { text: messageText, sender });
+
+            // Clear the input field
+            msgInput.value = '';
+        });
+
+        // Event listener for file uploads
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = (event) => {
+                const fileData = {
+                    sender: 'User',
+                    name: file.name,
+                    data: event.target.result.split(',')[1], // Get the base64 data
+                };
+
+                // Emit the file data to the server
+                socket.emit('uploadFile', fileData);
+            };
+
+            reader.readAsDataURL(file);
+        });
+
+        // Event listener for receiving chat messages
+        socket.on('chat message', (message) => {
+            console.log("chat-->",message);
+            const messageElement = document.createElement('div');
+            messageElement.textContent = `${message.sender}: ${message.text}`;
+            messagesContainer.appendChild(messageElement);
+        });
+
+        // Event listener for receiving uploaded files
+        socket.on('fileUploaded', (message) => {
+            const fileElement = document.createElement('div');
+            fileElement.textContent = `${message.sender} uploaded a file: ${message.filePath}`;
+            messagesContainer.appendChild(fileElement);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class constant {
+    constructor() {
+        this.USER_EXIST_ALREADY = 'user Exist Already';
+        this.USER_CREATED = 'User Created Successfully';
+        this.ERROR = 'error';
+        this.LOGIN_SUCCESSFUL = 'User Login Successful';
+        this.INVALID_USER = 'Invalid User';
+        this.BADREQUEST = 400;
+        this.USER_LOGIN = "login Successful";
+        this.UPDATED = "updated Successfully";
+        this.NAME_ERROR = "please provide the name";
+        this.AGE_ERROR = "Please provide the Age";
+        this.EMAIL_ERROR = "Please Provide the Email";
+        this.PASSWORD_ERROR = "Please Provide the Password";
+        this.WALLET_CREATED = "Wallet Created Successfully";
+        this.WALLET_CRED_ERROR = "Either Password Create or Wallet Create Problem";
+        this.WALLET_CREATE_ERROR = "Error in creating Wallet in blockchain";
+        this.MESSAGE_SENT = "Message Sent Successfully";
+        this.USER_NOT_Found = "User Not Found Enter with correct details";
+        this.NOT_VERIFIED = "not_verified";
+        this.VERIFIED = "Verified";
+        this.USER_VERIFIED = "User Verified Successfully";
+        this.WRONG_DETAILS = "Wrong Details Filled Kindly fill the correct details";
+        this.INTERNAL_ERROR = "Internal Server Error";
+        this.DATA_NOT_CREATED = "Data Not Created";
+        this.USER_NOT_VERIFIED = "User not verified";
+        this.DATA_NOT_FOUND = "Data Not Found";
+        this.DATA_NOT_UPDATED = "Data Not Updated";
+        this.WRONG_EMAIL = "Invalid Email";
+        this.AUTH_ERROR = "Provide the Jwt Token";
+        this.USER_VERIFIED_ALREADY = "User Verified Successfully";
+        this.USER_MOBILE_VERIFIED = "Mobile Number Verified";
+        this.USER_EMAIL_VERIFIED = "User Email Verified";
+        this.INVALID_OTP = "Invalid Otp";
+        this.CRED_NOT_ALLOWED = "No Modification On UserCreds";
+        this.TYPE_NULL = "type is not provided";
+        this.Mobile_ERROR = "Mobile is not provided";
+        this.TOKEN_ERROR = "Token is not provided";
+        this.OTP_ERROR = "Otp is not provided";
+        this.aadharNo_ERROR = "Aadhar Not Provided";
+        this.backImg_ERROR = "BackImg Not Provided";
+        this.frontImg_ERROR = "FrontImg Not Provided";
+        this.pending = "pending";
+        this.failed = "failed";
+        this.complete = "complete";
+        this.Data_Found_successfully = "Data Found Successfully";
+        this.User_Not_Active = "User Is Blocked By Admin";
+        this.Complete_Kyc = "Kindly Complete The Kyc";
+        this.Access_Not_Allowed = "Access Not Allowed";
+        this.Kyc_Pending = "Kyc is In Pending";
+        this.DATA_CREATED = "data Created Successfully";
+        this.FILE_NOT_SUPPORTED = "File Not Supported";
+        this.NO_MESSAGE = "No Messages";
+    }
+}
+exports.default = new constant();
