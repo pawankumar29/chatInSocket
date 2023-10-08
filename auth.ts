@@ -15,7 +15,7 @@ function authController(req:express.Request|any, res:express.Response, next:expr
 
     const secret:String|any=process.env.secret;
     const decoded:any= jwt.verify(token, secret); 
-    // console.log("d---->",decoded);
+     console.log("d---->",decoded);
 
     if(decoded.status)
     req.userData= decoded;

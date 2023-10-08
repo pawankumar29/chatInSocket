@@ -26,7 +26,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_typescript_1 = require("sequelize-typescript");
 const dotenv = __importStar(require("dotenv"));
 dotenv.config();
-// console.log(process.env.dbName);
 const sequelize = new sequelize_typescript_1.Sequelize({
     database: process.env.dbName,
     username: process.env.username,

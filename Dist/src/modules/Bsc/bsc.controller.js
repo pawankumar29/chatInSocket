@@ -60,31 +60,7 @@ class bscController {
     initializeRoutes() {
         this.router
             .all(`/*`)
-            .post('/generateWallet', 
-        //  Middlewares.default.signUpBody,
-        //  postValidate,
-        bsc.default.generateWallet, this.responseHandler);
-        // .post(
-        //   '/uploadKyc',
-        //   // Middlewares.default.LoginBody,
-        //   //  postValidate,
-        //   bsc.default.uploadKyc,
-        //   this.responseHandler
-        // )
-        //  .post(
-        //   '/updateKyc',
-        //   // Middlewares.default.LoginBody,
-        //   //  postValidate,
-        //   bsc.default.updateKyc,
-        //   this.responseHandler
-        // )
-        // .get(
-        //   '/kycList',
-        //   // Middlewares.default.LoginBody,
-        //   //  postValidate,
-        //   bsc.default.kycListing,
-        //   this.responseHandler
-        // )
+            .post('/generateWallet', bsc.default.generateWallet, this.responseHandler);
     }
 }
 exports.default = bscController;

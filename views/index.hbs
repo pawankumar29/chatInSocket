@@ -1,0 +1,131 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat App</title>
+</head>
+<body>
+  <ul id="messages"></ul>
+  <input id="messageInput" autocomplete="off" /><button id="sendMessage">Send</button>
+  <input type="file" id="fileInput" />
+  <button id="uploadFile">Upload</button>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const socket = io();
+      const messageInput = document.getElementById('messageInput');
+      const sendMessage = document.getElementById('sendMessage');
+      const fileInput = document.getElementById('fileInput');
+      const uploadFile = document.getElementById('uploadFile');
+      const messages = document.getElementById('messages');
+
+      // Handle sending chat messages
+      sendMessage.addEventListener('click', () => {
+        const messageText = messageInput.value;
+        if (messageText) {
+          socket.emit('chat message', { text: messageText, sender: 'User' });
+          messageInput.value = '';
+        }
+      });
+
+      // Handle sending file/image uploads
+      uploadFile.addEventListener('click', () => {
+        console.log("pawan")
+        const file = fileInput.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            const fileData = event.target.result;
+            socket.emit('uploadFile', {
+              data: fileData,
+              name: file.name,
+              sender: 'User',
+            });
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+
+      // Handle incoming chat messages
+      socket.on('chat message', (message) => {
+        console.log("in chat masage")
+        const li = document.createElement('li');
+        li.textContent = `${message.sender}: ${message.text}`;
+        messages.appendChild(li);
+        // socket.emit('chat message',message);
+      });
+
+      // Handle incoming file/image uploads
+      socket.on('fileUploaded', (fileData) => {
+        const li = document.createElement('li');
+        li.textContent = `${fileData.sender} uploaded a file: ${fileData.filePath}`;
+        messages.appendChild(li);
+      });
+    });
+  </script>
+</body>
+</html> -->
+
+
+<!-- index.html -->
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Socket.io Chat</title>
+  <!-- Include Socket.io and jQuery -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <input id="message" type="text" placeholder="Message">
+  <button id="send">Send</button>
+  <ul id="chat"></ul>
+  <script>
+    // Create a socket.io client instance
+    const socket = io();
+
+    // Prompt the user for email, room, and type
+    const senderId = prompt('Enter your senderid:');
+        const receiverId = prompt('Enter your receiverid:');
+    const room = prompt('Enter the room name:');
+    const type = prompt('Enter the type:');
+
+    // Emit a 'join' event to the server with the provided room and type
+    socket.emit('join', { room: room, type: type,userId:senderId});
+        socket.emit('join', { room: room, type: type,userId:receiverId});
+
+
+    // Add an event listener to the 'Send' button
+    document.getElementById('send').addEventListener('click', () => {
+      const message = document.getElementById('message').value;
+      if (message.trim() !== '') {
+        // Emit a 'chat' event to the server with the message data
+        socket.emit('chat', {  from: senderId,
+              to: receiverId,
+              message: message,
+              room: room
+ }); // Change senderId and receiverId accordingly
+        document.getElementById('message').value = message;
+      }
+    });
+
+    // Add an event listener for the 'chat' event from the server
+    socket.on('chat', (message) => {
+      console.log("in chat one ", message);
+    //  socket.emit('chat', message);
+      document.getElementById('chat').innerHTML += `<li>${message.from}:to  ${message.to}</li>`;
+    });
+
+    // Add an event listener for the 'join' event from the server
+    socket.on('join', (message) => {
+      console.log("in chat one ", message);
+      document.getElementById('chat').innerHTML += `<li>connected ${message.room}: which is   ${message.type}</li>`;
+    });
+  </script>
+</body>
+</html>
+

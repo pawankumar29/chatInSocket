@@ -3,41 +3,31 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.User = void 0;
+exports.participants = void 0;
 const sequelize_1 = require("sequelize");
 const sequelize_2 = __importDefault(require("../sequelize"));
-exports.User = sequelize_2.default.define('User', {
+const user_model_1 = require("./user.model");
+const room_model_1 = require("./room.model");
+exports.participants = sequelize_2.default.define('participants', {
     id: {
         type: sequelize_1.DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
     },
-    name: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
-    },
-    email: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
-    },
-    age: {
+    userId: {
         type: sequelize_1.DataTypes.INTEGER,
         allowNull: false,
+        references: {
+            model: user_model_1.User,
+            key: 'id',
+        }
     },
-    otp: {
+    roomId: {
         type: sequelize_1.DataTypes.INTEGER,
-        allowNull: true,
-    },
-    mobile: {
-        type: sequelize_1.DataTypes.STRING,
         allowNull: false,
+        references: {
+            model: room_model_1.room,
+            key: 'id',
+        },
     },
-    status: {
-        type: sequelize_1.DataTypes.INTEGER,
-        defaultValue: 5
-    },
-    type: {
-        type: sequelize_1.DataTypes.INTEGER,
-        defaultValue: 1
-    }
 });

@@ -87,48 +87,6 @@ class bscHelper {
                 return setResponse.default.error400(response, { error: errorToSend });
             }
         });
-        // fetchBalance = async (request: Express.Request, response: Express.Response, next: Express.NextFunction
-        //     ) => {
-        //             let responseToSend: response;
-        //             const walletAddress=request.params.walletAddress;
-        //             const walletData=await Wallet.findOne({
-        //                 where:{
-        //                     walletAddress:walletAddress
-        //                 },
-        //                 include:{
-        //                     model:Coin,
-        //                     attributes:["tokenAddress"]
-        //                 }
-        //             })
-        //         //     if (walletData) {
-        //         //         data.walletAddress = createWallet.address;
-        //         //         const passwordUpdate = await Password.update({ privateKey: createWallet.privateKey }, {
-        //         //             where: {
-        //         //                 userId: request.body.userId
-        //         //             }
-        //         //         });
-        //         //         const walletDataUpdate = await Wallet.create(data);
-        //         //         if (passwordUpdate[0] && walletDataUpdate) {
-        //         //             responseToSend = {
-        //         //                 status: 1,
-        //         //                 error: false,
-        //         //                 message: constant.WALLET_CREATED,
-        //         //                 data: walletDataUpdate
-        //         //             }
-        //         //             request.body.result = responseToSend;
-        //         //             next();
-        //         //         }
-        //         //         else
-        //         //             throw { msg: constant.WALLET_CRED_ERROR }
-        //         //     }
-        //         //     else
-        //         //         throw { msg: constant.WALLET_CREATE_ERROR };
-        //         // } catch (error) {
-        //         //     console.log("error--->", error);
-        //         //     const errorToSend: error = { message: constant.ERROR, error: error };
-        //         //     return setResponse.default.error400(response, { error: errorToSend });
-        //         // }
-        // }
         this.sendOtp = (request, response, next) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const id = request.params.id;

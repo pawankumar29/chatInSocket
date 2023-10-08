@@ -8,9 +8,17 @@ const response_1 = __importDefault(require("../../constant/response"));
 class socketValidation {
     constructor() {
         this.chatBody = [
-            (0, express_validator_1.body)("text")
+            (0, express_validator_1.body)("message")
                 .notEmpty()
                 .withMessage(response_1.default.NO_MESSAGE),
+        ];
+        this.joinBody = [
+            (0, express_validator_1.body)("room")
+                .notEmpty()
+                .withMessage(response_1.default.NO_ROOM),
+            (0, express_validator_1.body)("type")
+                .notEmpty()
+                .withMessage(response_1.default.NO_TYPE),
         ];
     }
 }

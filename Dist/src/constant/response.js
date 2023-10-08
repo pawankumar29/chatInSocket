@@ -53,6 +53,8 @@ class constant {
         this.DATA_CREATED = "data Created Successfully";
         this.FILE_NOT_SUPPORTED = "File Not Supported";
         this.NO_MESSAGE = "No Messages";
+        this.NO_ROOM = "No room";
+        this.NO_TYPE = "no Type ";
     }
 }
 exports.default = new constant();

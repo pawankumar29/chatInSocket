@@ -32,39 +32,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express = __importStar(require("express"));
-const Middlewares = __importStar(require("./kyc.validation"));
-const index_1 = require("../../middlewares/index");
-const Helper = __importStar(require("../../Helper/index"));
-const CM = __importStar(require("../../constant/response"));
-const kyc = __importStar(require("./kyc.helper"));
-const kyc_middleware_1 = require("../../middlewares/kyc.middleware");
-const setResponse = Helper.ResponseHelper.default;
-class kycController {
-    constructor() {
-        this.path = '';
-        this.router = express.Router();
-        this.responseHandler = (request, response) => __awaiter(this, void 0, void 0, function* () {
-            try {
-                if (typeof request.body.result != "undefined") {
-                    return setResponse.success(response, request.body.result);
-                }
-                else {
-                    return setResponse.error400(response, { error: CM.default.ERROR });
-                }
+exports.checkKyc = void 0;
+const constant = __importStar(require("../../constant/response"));
+function checkKyc(req, res, next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            if (req.userData.status === 3) {
+                next();
             }
-            catch (err) {
-                console.log(`ERROR:: RESPONSE HANDLER`, err);
-                return setResponse.error400(response, { error: err });
-            }
-        });
-        this.initializeRoutes();
-    }
-    initializeRoutes() {
-        this.router
-            .all(`/*`)
-            .post('/uploadKyc', Middlewares.default.kycUploadBody, index_1.postValidate, kyc_middleware_1.kycAccessControllerPending, kyc.default.uploadKyc, this.responseHandler)
-            .post('/updateKyc', kyc_middleware_1.kycAccessController, kyc.default.updateKyc, this.responseHandler);
-    }
+            else
+                throw new Error(constant.default.Complete_Kyc);
+        }
+        catch (error) {
+            return res.status(401).json({ message: error.message });
+        }
+    });
 }
-exports.default = kycController;
+exports.checkKyc = checkKyc;

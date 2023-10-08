@@ -72,7 +72,8 @@ class userHelper {
                         password: password,
                         mobile: mobile,
                         status: 5,
-                        type: type
+                        type: type,
+                        userId: dataToCreate.id
                     };
                     const secret = process.env.secret;
                     const token = jwt.sign(payload, secret);
@@ -122,6 +123,7 @@ class userHelper {
                             password: password,
                             status: userExist.status,
                             mobile: userExist.mobile,
+                            userId: userExist.id
                         };
                         const token = jwt.sign(payload, secret);
                         responseToSend = {

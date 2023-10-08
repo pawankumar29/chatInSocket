@@ -13,7 +13,7 @@ function authController(req, res, next) {
     try {
         const secret = process.env.secret;
         const decoded = jsonwebtoken_1.default.verify(token, secret);
-        // console.log("d---->",decoded);
+        console.log("d---->", decoded);
         if (decoded.status)
             req.userData = decoded;
         else

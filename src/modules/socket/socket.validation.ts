@@ -8,11 +8,21 @@ class socketValidation{
 
    
     public chatBody=[
-        body("text")
+        body("message")
         .notEmpty()
         .withMessage(constant.NO_MESSAGE),
     
     ]
+    public joinBody=[
+        body("room")
+        .notEmpty()
+        .withMessage(constant.NO_ROOM),
+        body("type")
+        .notEmpty()
+        .withMessage(constant.NO_TYPE),
+    
+    ]
+
 
 
 

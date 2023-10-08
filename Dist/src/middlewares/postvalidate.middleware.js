@@ -5,12 +5,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_validator_1 = require("express-validator");
 const response_1 = __importDefault(require("../constant/response"));
-/**
- * Throw error if failed to validate
- * @param req
- * @param res
- * @param next
- */
 const postValidate = (req, res, next) => {
     const error = (0, express_validator_1.validationResult)(req);
     const responseError = [];

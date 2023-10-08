@@ -46,32 +46,10 @@ exports.compareHashedPassword = compareHashedPassword;
 exports.upload = (0, multer_1.default)({
     storage: multer_1.default.diskStorage({
         destination: function (req, file, cb) {
-            // where you want to keep the data
             cb(null, 'public');
         },
         filename: function (req, file, cb) {
             cb(null, file.fieldname + "-" + Date.now() + ".txt");
         },
     }),
-    // fileFilter: function (req:any, file, cb) {
-    //   const size=5;
-    //     const allowedExtensions = ['.csv','.png','.jpg','.jpeg','.txt'];
-    //     const imgExtension=['jpg','jpeg','png'];
-    //     const fileExtension = path.extname(file.originalname).toLowerCase();
-    //     if (!allowedExtensions.includes(fileExtension)) {
-    //       req.fileValidationError = "Forbidden extension";
-    //       // return cb(null, false, req.fileValidationErro);
-    //       cb(null, true);
-    //     }
-    //     // if(imgExtension.includes(orgExt)){
-    //     //   const dimension:any=imageSize(new Buffer(file.path));
-    //     //   const maxWidth=800;
-    //     //   const maxHeight=600;
-    //     //   if(dimension.width>maxWidth||dimension.height>maxHeight){
-    //     //     cb(new Error(`kindly enter image with proper size `));
-    //     //   }
-    //     // }
-    //     cb(null, true);
-    // }
 });
-//   

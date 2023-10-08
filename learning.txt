@@ -1,0 +1,10 @@
+console of server comes to our console
+console of individual client goes to there respective chrome 
+use socket.on instead of io.on to catch eventd at server side 
+if circular dependency error comes just make another file 
+apis to made 
+1.user list 
+2.my chats with all users either receiver or sender 
+3.create room api 
+4.socket chat without frontend
+5.latest chat of the user 

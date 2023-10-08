@@ -50,7 +50,10 @@ Access_Not_Allowed="Access Not Allowed";
 Kyc_Pending="Kyc is In Pending";
 DATA_CREATED="data Created Successfully";
 FILE_NOT_SUPPORTED="File Not Supported";
-NO_MESSAGE="No Messages"
+NO_MESSAGE="No Messages";
+NO_ROOM="No room";
+NO_TYPE="no Type "
+
 }
 
 

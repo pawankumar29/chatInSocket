@@ -72,10 +72,7 @@ class userController {
             .put('/update/:id', auth_1.default, user_helper_1.default.update, this.responseHandler)
             .post('/sendOtp', auth_1.default, Middlewares.default.sendOtpBody, index_1.postValidate, user_helper_1.default.sendOtp, this.responseHandler)
             .post('/verifyOtp', auth_1.default, Middlewares.default.verifyOtpBody, index_1.postValidate, user_helper_1.default.verifyOtp, this.responseHandler)
-            .post('/uploadImg', auth_1.default, 
-        // Middlewares.default.verifyOtpBody,
-        // postValidate,
-        Helper.upload.single('file'), user_helper_1.default.uploadImg, this.responseHandler);
+            .post('/uploadImg', auth_1.default, Helper.upload.single('file'), user_helper_1.default.uploadImg, this.responseHandler);
     }
 }
 exports.default = userController;

@@ -5,7 +5,7 @@ import {Password } from "./password.model"
 import { Wallet } from "./wallet.model";
 import { Kyc } from "./kyc.model";
 import { picture } from "./picture.model";
-import { messages } from "./message.model";
+import messages from "../models/message.model"
 
 
 
@@ -55,21 +55,22 @@ import { messages } from "./message.model";
 
 });
 
- User.hasOne(Password, { foreignKey: 'userId' });
- Password.belongsTo(User, { foreignKey: 'userId' });
+//  User.hasOne(Password, { foreignKey: 'userId' });
+//  Password.belongsTo(User, { foreignKey: 'userId' });
 
 
 
 
- User.hasOne(Wallet, { foreignKey: 'userId' });
- Wallet.belongsTo(User, { foreignKey: 'userId' });
+//  User.hasOne(Wallet, { foreignKey: 'userId' });
+//  Wallet.belongsTo(User, { foreignKey: 'userId' });
 
 
- User.hasOne(Kyc, { foreignKey: 'userId' });
- Kyc.belongsTo(User, { foreignKey: 'userId' });
+//  User.hasOne(Kyc, { foreignKey: 'userId' });
+//  Kyc.belongsTo(User, { foreignKey: 'userId' });
 
- User.hasOne(picture, { foreignKey: 'userId' });
- picture.belongsTo(User, { foreignKey: 'userId' });
+//  User.hasOne(picture, { foreignKey: 'userId' });
+//  picture.belongsTo(User, { foreignKey: 'userId' });
+
 
 
 
