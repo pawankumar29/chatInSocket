@@ -61,17 +61,21 @@ class socketHelper {
                             userId: {
                                 [sequelize_1.Op.ne]: userId
                             }
-                        }
+                        },
+                        include: [{
+                                model: room_model_1.room,
+                                attributes: ["name"]
+                            }
+                        ]
                     });
                     console.log("party-->", participants);
                     participants.forEach((element) => {
-                        console.log("party-->", participants);
                         if (sender) {
                             data = {
                                 from: userId,
                                 to: element.userId,
                                 message: message,
-                                roomId: element.roomId
+                                room: element.room.name
                             };
                         }
                         else {
@@ -156,7 +160,6 @@ class socketHelper {
             try {
                 console.log("in chat latest", req.userData);
                 const userId = req.userData.userId;
-                console.log("user--->", userId);
                 const userData = yield message_model_1.default.findAll({
                     where: {
                         [sequelize_1.Op.or]: [

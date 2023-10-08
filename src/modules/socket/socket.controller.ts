@@ -4,7 +4,7 @@ import { User } from '../../db/models/user.model'
 import socket from '../../socket/client'
 import * as constant from "../../constant/response"
 import sequelize from '../../db/sequelize'
-import { Sequelize } from 'sequelize';
+import { Model, Sequelize } from 'sequelize';
 import { participant } from '../../db/models/participant.model'
 import { room } from '../../db/models/room.model'
 import { Op } from 'sequelize';
@@ -39,7 +39,12 @@ class socketHelper {
               [Op.ne]: userId
             }
 
+          },
+          include:[{
+            model:room,
+            attributes:["name"]
           }
+          ]
         });
         console.log("party-->", participants)
 
@@ -49,7 +54,9 @@ class socketHelper {
               from: userId,
               to: element.userId,
               message: message,
-              roomId: element.roomId
+              // roomId: element.room.name
+              room: element.room.name
+
 
             }
           }

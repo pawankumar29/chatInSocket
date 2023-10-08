@@ -41,6 +41,7 @@ const initializeSocketServer = (httpServer) => {
                         roomId: roomCreate.id
                     };
                     const participantData = yield participant_model_1.participant.create(participantDataToStore);
+                    socket.emit('join', msg);
                 }
                 else {
                     const participantExist = yield participant_model_1.participant.findOne({
@@ -59,6 +60,8 @@ const initializeSocketServer = (httpServer) => {
                         };
                         const participantData = yield participant_model_1.participant.create(participantDataToStore);
                     }
+                    socket.join(msg.room);
+                    io.to(socket.id).emit('join', msg);
                     console.log("errorInJoin==room exist ALREADY");
                 }
             }
@@ -69,6 +72,12 @@ const initializeSocketServer = (httpServer) => {
         socket.on('chat', (msg) => __awaiter(void 0, void 0, void 0, function* () {
             console.log("in app.jscalling", msg);
             try {
+                const roomExist = yield room_model_1.room.findOne({
+                    where: {
+                        name: msg.room
+                    }
+                });
+                msg.roomId = roomExist.id;
                 const messageData = yield message_model_1.default.create(msg);
                 console.log("message", messageData);
                 socket.emit('chat', msg);
