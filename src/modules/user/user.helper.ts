@@ -302,8 +302,6 @@ class userHelper {
 
 
     }
-
-
     verifyOtp = async (request: express.Request, response: express.Response, next: express.NextFunction
     ) => {
         try {
@@ -379,7 +377,6 @@ class userHelper {
 
 
     }
-
 
     uploadImg = async (request: express.Request|any, response: express.Response, next: express.NextFunction
         ) => {

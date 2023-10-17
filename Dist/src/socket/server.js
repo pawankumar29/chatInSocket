@@ -19,7 +19,6 @@ const participant_model_1 = require("../db/models/participant.model");
 const message_model_1 = __importDefault(require("../db/models/message.model"));
 const initializeSocketServer = (httpServer) => {
     const io = new socket_io_1.Server(httpServer);
-    const map = new Map();
     io.on('connection', (socket) => {
         console.log('A user connected in server');
         socket.on('join', (msg) => __awaiter(void 0, void 0, void 0, function* () {
@@ -36,6 +35,7 @@ const initializeSocketServer = (httpServer) => {
                         type: msg.type
                     };
                     const roomCreate = yield room_model_1.room.create(roomData);
+                    console.log("roomCreate===>", roomCreate);
                     const participantDataToStore = {
                         userId: msg.userId,
                         roomId: roomCreate.id
@@ -60,8 +60,6 @@ const initializeSocketServer = (httpServer) => {
                         };
                         const participantData = yield participant_model_1.participant.create(participantDataToStore);
                     }
-                    socket.join(msg.room);
-                    io.to(socket.id).emit('join', msg);
                     console.log("errorInJoin==room exist ALREADY");
                 }
             }
@@ -78,6 +76,16 @@ const initializeSocketServer = (httpServer) => {
                     }
                 });
                 msg.roomId = roomExist.id;
+                const checkParticipant = yield participant_model_1.participant.findOne({
+                    where: {
+                        roomId: msg.roomId,
+                        userId: msg.to
+                    }
+                });
+                if (!checkParticipant) {
+                    yield participant_model_1.participant.create({ roomId: msg.roomId,
+                        userId: msg.to });
+                }
                 const messageData = yield message_model_1.default.create(msg);
                 console.log("message", messageData);
                 socket.emit('chat', msg);

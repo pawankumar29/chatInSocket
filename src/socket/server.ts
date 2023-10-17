@@ -1,4 +1,3 @@
-// socketServer.ts
 import { Server } from 'socket.io';
 import { room } from '../db/models/room.model';
 import { participant } from '../db/models/participant.model';
@@ -7,7 +6,6 @@ import messages from '../db/models/message.model';
 export const initializeSocketServer = (httpServer: any) => {
     const io = new Server(httpServer);
 
-    const map = new Map();
     io.on('connection', (socket) => {
         console.log('A user connected in server');
 
@@ -27,13 +25,13 @@ export const initializeSocketServer = (httpServer: any) => {
 
 
 
-
                 if (!roomExist) {
                     const roomData = {
-                        name: msg.room,
-                        type: msg.type
+                        name: msg.room,    
+                        type: msg.type      
                     }
                     const roomCreate: any = await room.create(roomData);
+                    console.log("roomCreate===>",roomCreate);
                     const participantDataToStore = {
                         userId: msg.userId,
                         roomId: roomCreate.id
@@ -67,8 +65,8 @@ export const initializeSocketServer = (httpServer: any) => {
 
                     }
                     //  //code for testing 
-                     socket.join(msg.room);
-                     io.to(socket.id).emit('join', msg); // only while checking frontend for me 
+                    //  socket.join(msg.room);
+                    //  io.to(socket.id).emit('join', msg); // only while checking frontend for me 
                     //  //over
 
                     console.log("errorInJoin==room exist ALREADY",)
@@ -87,7 +85,7 @@ export const initializeSocketServer = (httpServer: any) => {
 
 
 
-        // Add your Socket.IO event handlers here
+        //  Socket.IO event handlers
 
         socket.on('chat', async (msg) => {
             console.log("in app.jscalling", msg);
@@ -102,6 +100,21 @@ export const initializeSocketServer = (httpServer: any) => {
                 });
 
                 msg.roomId=roomExist.id;
+
+                  // if the participant to is not added in the roomId
+
+                  const checkParticipant=await participant.findOne({
+                     where:{
+                        roomId:msg.roomId,
+                        userId:msg.to
+                     }
+                  })
+
+                  if(!checkParticipant){
+                    await participant.create({ roomId:msg.roomId,
+                        userId:msg.to});
+                        
+                  }
 
                 //------------------------------------------------------------
                 const messageData = await messages.create(msg);

@@ -8,82 +8,139 @@ import { Model, Sequelize } from 'sequelize';
 import { participant } from '../../db/models/participant.model'
 import { room } from '../../db/models/room.model'
 import { Op } from 'sequelize';
+import randomString from "randomstring"
 
 
 class socketHelper {
-  
 
-   
+
+
 
   uploadChat = async (req: express.Request | any, res: express.Response | any, next: express.NextFunction
   ) => {
     try {
-      let data: any;
-      const { roomName, message, sender } = req.body;
-      const userId = req.userData.userId;
-      // console.log("userrrr--->",userId);
+
+      const { receiver_email, message } = req.body;
 
 
-      const roomData: any = await room.findOne({
+      // check user exist in the contact list of user with room id
+
+      const checkReceiverExistWithRoom: any = await User.findOne({
         where: {
-          name: roomName
+          email: receiver_email,
+        },
+        include: {
+          model: participant,
         }
-      })
+      });
 
-      if (roomData) {
-        const participants: any = await participant.findAll({
-          where: {
+      // check sender exist with the room id
 
-            roomId: roomData.id,
-            userId: {
-              [Op.ne]: userId
+      const checkSenderExistWithRoom: any = await User.findOne({
+        where: {
+          email: "pk1532@gmail.com",
+        },
+        include: {
+          model: participant,
+        }
+      });
+
+      let roomId;
+
+      let receiverArray: any = [];
+      let senderArray: any = [];
+
+      // case to check if participant room exist
+      if (checkReceiverExistWithRoom) {
+        const arr1 = checkReceiverExistWithRoom.participants;
+        const arr2 = checkSenderExistWithRoom.participants;
+
+        // checking if same roomid exist for both
+
+        receiverArray = arr1.map((ele: any) => {
+          return ele.roomId;
+        }
+        )
+
+
+        senderArray = arr2.map((ele: any) => {
+          return ele.roomId;
+        }
+        )
+
+        receiverArray.forEach((e: any) => {
+          senderArray.forEach((e1: any) => {
+            if (e === e1)
+              roomId = e;
+          })
+        })
+
+        const receiverId = checkReceiverExistWithRoom.id;
+        const senderId = checkSenderExistWithRoom.id;
+
+        if (!roomId) {  // if receiver and sender are not in the same room 
+
+
+
+          const randomRoom = randomString.generate({
+            length: 12,
+            charset: 'alphabetic'
+          });
+
+         await  room.create({name: randomRoom, type: 'single'});
+
+          socket.emit('join', { room: randomRoom, type: 'single', userId: senderId });
+
+       
+
+          const data = {
+            from: senderId,
+            to: receiverId,
+            message: message,
+            room: randomRoom
+          }
+
+                   setTimeout(()=>{
+                  socket.emit('chat', data);
+                   },1000);
+
+
+
+
+
+        }
+        else {
+          // if room found with the same room 
+           console.log("rook===>",roomId);
+          const findRoom: any = await room.findOne({
+            where: {
+              id: roomId
             }
-
-          },
-          include:[{
-            model:room,
-            attributes:["name"]
+          })
+             console.log("findRoom===>",findRoom)
+          const data = {
+            from: senderId,
+            to: receiverId,
+            message: message,
+            room: findRoom.name
           }
-          ]
-        });
-        console.log("party-->", participants)
 
-        participants.forEach((element: any) => {
-          if (sender) {
-            data = {
-              from: userId,
-              to: element.userId,
-              message: message,
-              // roomId: element.room.name
-              room: element.room.name
+                   socket.emit('chat', data);
 
 
-            }
-          }
-          else {
-            throw { message: "no sender" }
-// not for user receiving the message 
-            // data = {
-            //   from: element.userId,
-            //   to: userId,
-            //   message: message,
-            //   roomId: element.roomId
-
-            // }
-
-          }
-          socket.emit('chat', data);
-        });
-
-        return res.status(200).json({ status: true, message: 'Chat message sent successfully' });
-
+        }
       }
-      else
-        throw { message: "no room data" }
+      else{
+          throw {message:"no user present "}
+      }
+
+
+
+      res.json({ status: 1, data: "message sent successfully " });
 
     } catch (error: any) {
-      console.log(error);
-      return res.status(500).json({ status: false, error: error.message || error });
+      console.log("error==>", error);
+      res.json({ status: 0, error: error.message || error })
     }
   }
 
@@ -146,67 +203,191 @@ class socketHelper {
     }
   }
 
-
+  // all user chats irrespective of the users 
   userChatList = async (req: express.Request | any, res: express.Response | any, next: express.NextFunction
-    ) => {
-      try {
-        const userId = req.userData.userId; // replace it with the req.userData.userId
-  
-  
-  
-        const userData: any = await messages.findAll({
-          where: {
-           [ Op.or]:{
-               to:userId,
-               from:userId
-            }
+  ) => {
+    try {
+      const userId = req.userData.userId; // replace it with the req.userData.userId
+
+
+
+      const userData: any = await messages.findAll({
+        where: {
+          [Op.or]: {
+            to: userId,
+            from: userId
           }
-        })
-  
-  
-  
-        // add the participants 
-  
-        res.json({ status: 1, msg: "user chats" ,data:userData});
-  
-  
-      } catch (error: any) {
-        console.log(error);
-        return res.status(500).json({ status: false, error: error.message || error });
-      }
-    }
-
-    userLatestChat = async (req: express.Request | any, res: express.Response | any, next: express.NextFunction
-      ) => {
-        try {
-          console.log("in chat latest",req.userData)
-          const userId = req.userData.userId;
-    
-    
-          const userData = await messages.findAll({
-            where: {
-              [Op.or]: [
-                { to: userId },
-                { from: userId }
-              ]
-            },
-            order: [['createdAt', 'DESC']], 
-            limit: 1 
-          });
-    
-    
-    
-          // add the participants 
-    
-          res.json({ status: 1, msg: "user chats" ,data:userData});
-    
-    
-        } catch (error: any) {
-          console.log(error);
-          return res.status(500).json({ status: false, error: error.message || error });
         }
+      })
+
+
+
+      // add the participants 
+
+      res.json({ status: 1, msg: "user chats", data: userData });
+
+
+    } catch (error: any) {
+      console.log(error);
+      return res.status(500).json({ status: false, error: error.message || error });
+    }
+  }
+
+  userLatestChat = async (req: express.Request | any, res: express.Response | any, next: express.NextFunction
+  ) => {
+    try {
+      const userId = req.userData.userId;
+      const email = req.body.other_user_email
+
+      const senderUser: any = await User.findOne({
+        where: {
+          email: email
+        }
+      })
+
+
+      if (senderUser) {
+        const sender: any = senderUser.id
+
+
+        const userData = await messages.findAll({
+          where: {
+            [Op.or]: [
+              {
+                [Op.and]: [
+                  { from: userId },
+                  { to: sender },
+                ],
+              },
+              {
+                [Op.and]: [
+                  { to: userId },
+                  { from: sender },
+                ],
+              },
+            ]
+
+          },
+
+          order: [['createdAt', 'DESC']],
+          limit: 1
+        });
+
+
+
+
+
+        // add the participants 
+
+        res.json({ status: 1, msg: "user chats", data: userData });
+      }
+      else
+        throw { message: 'no other user avalibale ' }
+
+
+    } catch (error: any) {
+      console.log(error);
+      return res.status(500).json({ status: false, error: error.message || error });
+    }
+  }
+
+  // all the connected user to the user
+  myChatList = async (req: express.Request | any, res: express.Response | any, next: express.NextFunction
+  ) => {
+    try {
+      const userId = req.userData.userId; // replace it with the req.userData.userId
+
+
+      console.log("userId", userId);
+      const userData: any = await messages.findAll({
+        where: {
+          [Op.or]: [{
+            to: userId
+          },
+          { from: userId }
+
+          ]
+
+        },
+
+        include: [
+          {
+            model: User,
+            attributes: ["name", "email", "age", "mobile", "id"],
+            where: {
+              id: { [Op.not]: userId },
+            },
+          }],
+
+        attributes: [["name", "user.name"], ["email", "user.email"], ["age", "user.age"], ["mobile", "user.mobile"]],
+        group: ["User.id"]
+
+      })
+
+      console.log("userdata", userData);
+
+      const result = [];
+
+      for (const item of userData) {
+        const user = item.User;
+        result.push(user);
       }
 
+      res.json({ status: 1, msg: "user chats", data: result });
+
+
+    } catch (error: any) {
+      console.log(error);
+      return res.status(500).json({ status: false, error: error.message || error });
+    }
+  }
+
+  chooseUser = async (req: express.Request | any, res: express.Response | any, next: express.NextFunction
+  ) => {
+    try {
+      const userId = req.userData.userId; // replace it with the req.userData.userId
+
+      const otherUser: any = req.body.otherUser;
+
+      const { roomName, type } = req.body;
+      otherUser.toLowerCase();
+
+      const findUser: any = await User.findOne({
+        where: {
+          [Op.or]: [
+            { email: otherUser },
+            { mobile: otherUser }
+          ]
+        }
+      });
+
+
+      const roomExist: any = await room.findOne({
+        where: {
+          [Op.or]: [
+            { email: otherUser },
+            { mobile: otherUser }
+          ]
+        }
+      });
+
+      if (findUser) {
+        socket.emit('join', { room: room, type: type, userId: findUser.id });
+        socket.emit('join', { room: room, type: type, userId: userId })
+
+        res.json({ status: 1, msg: "User successfullly added and ready to chat " })
+      }
+      else
+        throw { message: 'no user found Kindly enter another user ' }
+
+
+
+
+    } catch (error: any) {
+      console.log(error);
+      return res.status(500).json({ status: false, error: error.message || error });
+    }
+  }
 }
 
 

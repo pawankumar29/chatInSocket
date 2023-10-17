@@ -8,3 +8,9 @@ apis to made
 3.create room api 
 4.socket chat without frontend
 5.latest chat of the user 
+
+
+//send message 
+
+1.check in room if user is joined to the room
+2.check in participants if our sender is the part of roomId
