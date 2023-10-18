@@ -11,6 +11,9 @@ class socketValidation{
         body("message")
         .notEmpty()
         .withMessage(constant.NO_MESSAGE),
+        body("receiver_email")
+        .notEmpty()
+        .withMessage(constant.NO_PARAM),
     
     ]
     public joinBody=[

@@ -91,7 +91,6 @@ export const initializeSocketServer = (httpServer: any) => {
             console.log("in app.jscalling", msg);
 
             try {
-
                 //--------------------
                 const roomExist:any=await room.findOne({
                     where:{

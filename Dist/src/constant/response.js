@@ -55,6 +55,7 @@ class constant {
         this.NO_MESSAGE = "No Messages";
         this.NO_ROOM = "No room";
         this.NO_TYPE = "no Type ";
+        this.NO_PARAM = "No Params";
     }
 }
 exports.default = new constant();

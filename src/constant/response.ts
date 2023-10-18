@@ -52,7 +52,8 @@ DATA_CREATED="data Created Successfully";
 FILE_NOT_SUPPORTED="File Not Supported";
 NO_MESSAGE="No Messages";
 NO_ROOM="No room";
-NO_TYPE="no Type "
+NO_TYPE="no Type ";
+NO_PARAM="No Params"
 
 }
 

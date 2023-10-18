@@ -11,6 +11,9 @@ class socketValidation {
             (0, express_validator_1.body)("message")
                 .notEmpty()
                 .withMessage(response_1.default.NO_MESSAGE),
+            (0, express_validator_1.body)("receiver_email")
+                .notEmpty()
+                .withMessage(response_1.default.NO_PARAM),
         ];
         this.joinBody = [
             (0, express_validator_1.body)("room")

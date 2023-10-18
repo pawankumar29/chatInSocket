@@ -10,7 +10,7 @@ const postValidate = (req, res, next) => {
     const responseError = [];
     if (!error.isEmpty()) {
         for (const errorRow of error.array()) {
-            responseError.push({ field: errorRow.type, message: errorRow.msg });
+            responseError.push({ field: errorRow.path, message: errorRow.msg });
         }
         return res.status(response_1.default.BADREQUEST).send({
             response: {

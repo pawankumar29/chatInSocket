@@ -15,18 +15,6 @@ import "./association";
 
 const pthee:any=path.join(__dirname, './local.env');
 
-console.log("pathee-->",pthee);
-
-
-
-
-
-
-
-
-
-
-
 const app = express();
 const server = http.createServer(app);
 
@@ -36,7 +24,6 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.use('/uploads', express.static(__dirname + '../uploads'));
 
 const pathee = path.join(__dirname, '../views');
-
 
 app.use(express.json());
 
@@ -62,7 +49,8 @@ app.get("/chatSection", async (req, res) => {
     return res.json({ error: error })
   }
 })
-// app.use('*', authController);
+
+app.use('*', authController);
 
 app.use(kyc);
 app.use(bsc);

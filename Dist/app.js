@@ -18,13 +18,13 @@ const http_1 = __importDefault(require("http"));
 const path_1 = __importDefault(require("path"));
 const user_controller_1 = __importDefault(require("./src/modules/user/user.controller"));
 const bsc_controller_1 = __importDefault(require("./src/modules/Bsc/bsc.controller"));
+const auth_1 = __importDefault(require("./auth"));
 const kyc_controller_1 = __importDefault(require("./src/modules/Kyc/kyc.controller"));
 const admin_controller_1 = __importDefault(require("./src/modules/admin/admin.controller"));
 const socket_router_1 = __importDefault(require("./src/modules/socket/socket.router"));
 const server_1 = require("./src/socket/server");
 require("./association");
 const pthee = path_1.default.join(__dirname, './local.env');
-console.log("pathee-->", pthee);
 const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
 (0, server_1.initializeSocketServer)(server);
@@ -50,6 +50,7 @@ app.get("/chatSection", (req, res) => __awaiter(void 0, void 0, void 0, function
         return res.json({ error: error });
     }
 }));
+app.use('*', auth_1.default);
 app.use(kyc);
 app.use(bsc);
 app.use(admin);

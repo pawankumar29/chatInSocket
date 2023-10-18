@@ -13,12 +13,12 @@ const postValidate = (
   res: express.Response,
   next: express.NextFunction
 ) => {
-  const error = validationResult(req);
+  const error:any = validationResult(req);
   const responseError: Array<object> = [];
 
   if (!error.isEmpty()) {
-    for (const errorRow of error.array()) {
-      responseError.push({ field: errorRow.type, message: errorRow.msg })
+    for (const errorRow  of error.array()) {
+      responseError.push({ field: errorRow.path, message: errorRow.msg })
     }
     return res.status(RESPONSES.BADREQUEST).send(
       {
